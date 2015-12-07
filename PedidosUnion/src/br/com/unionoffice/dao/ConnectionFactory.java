@@ -21,6 +21,7 @@ public class ConnectionFactory {
 	}
 	
 	public static void close() throws SQLException{
+		System.out.println("PASSOU AQUI");
 		if (conexao != null && !conexao.isClosed()) {
 			conexao.close();
 		}

@@ -13,7 +13,7 @@
          <ComboBox fx:id="cbTipoCliente" layoutX="14.0" layoutY="33.0" prefHeight="25.0" prefWidth="138.0" promptText="Selecione" />
          <Label fx:id="lbDocumento" layoutX="161.0" layoutY="10.0" text="CNPJ:" />
          <TextField fx:id="tfDocumento" alignment="CENTER" layoutX="160.0" layoutY="34.0" prefHeight="25.0" prefWidth="159.0" promptText="Apenas números" />
-         <CheckBox fx:id="chkNaoInformado" layoutX="210.0" layoutY="10.0" mnemonicParsing="false" text="Não informado" />
+         <CheckBox fx:id="chkNaoInformado" focusTraversable="false" layoutX="210.0" layoutY="10.0" mnemonicParsing="false" text="Não informado" />
          <Label fx:id="lbDocumento2" layoutX="331.0" layoutY="10.0" text="Inscrição Estadual" />
          <TextField fx:id="tfDocumento2" alignment="CENTER" layoutX="330.0" layoutY="34.0" prefHeight="25.0" prefWidth="159.0" />
          <Label fx:id="lbNomeRazao" layoutX="14.0" layoutY="70.0" text="Razão Social:" />
@@ -37,18 +37,18 @@
          <Label layoutX="301.0" layoutY="237.0" text="Representante:" />
          <ComboBox fx:id="cbRepresentante" layoutX="301.0" layoutY="258.0" prefHeight="25.0" prefWidth="189.0" />
          <Label fx:id="lbNomeRazao1" layoutX="14.0" layoutY="293.0" text="Observações:" />
-         <TextArea layoutX="15.0" layoutY="314.0" prefHeight="118.0" prefWidth="475.0" wrapText="true" />
+         <TextArea fx:id="taObservacoes" layoutX="15.0" layoutY="314.0" prefHeight="118.0" prefWidth="475.0" wrapText="true" />
          <Label layoutX="16.0" layoutY="442.0" text="Nome:" />
          <TextField fx:id="tfContato" layoutX="16.0" layoutY="460.0" prefHeight="25.0" prefWidth="314.0" />
          <Label layoutX="333.0" layoutY="442.0" text="Telefone:" />
          <TextField fx:id="tfTelefone" layoutX="333.0" layoutY="460.0" prefHeight="25.0" prefWidth="159.0" />
          <TitledPane collapsible="false" ellipsisString="" layoutX="15.0" layoutY="573.0" prefHeight="200.0" prefWidth="475.0" text="Contatos">
             <content>
-               <TableView prefHeight="174.0" prefWidth="154.0">
+               <TableView fx:id="tableContatos" prefHeight="174.0" prefWidth="154.0">
                  <columns>
-                   <TableColumn prefWidth="86.0" text="Contato" />
-                   <TableColumn prefWidth="84.0" text="Telefone" />
-                     <TableColumn prefWidth="303.0" text="E-mail" />
+                   <TableColumn fx:id="nomeContatoColumn" prefWidth="86.0" text="Contato" />
+                   <TableColumn fx:id="telefoneContatoColumn" prefWidth="84.0" text="Telefone" />
+                     <TableColumn fx:id="emailContatoColumn" prefWidth="303.0" text="E-mail" />
                  </columns>
                </TableView>
             </content>
@@ -56,10 +56,10 @@
          <Label layoutX="16.0" layoutY="491.0" text="Departamento:" />
          <TextField fx:id="tfDepartamento" layoutX="17.0" layoutY="509.0" prefHeight="25.0" prefWidth="159.0" />
          <Label layoutX="183.0" layoutY="491.0" text="E-mail:" />
-         <TextField fx:id="tfDepartamento1" layoutX="184.0" layoutY="509.0" prefHeight="25.0" prefWidth="308.0" />
-         <Button layoutX="464.0" layoutY="541.0" mnemonicParsing="false" text="+" />
-         <Button layoutX="435.0" layoutY="541.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="26.0" text="-" />
-         <Button fx:id="btSalvar" layoutX="13.0" layoutY="783.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Salvar" />
+         <TextField fx:id="tfEmailContato" layoutX="184.0" layoutY="509.0" prefHeight="25.0" prefWidth="308.0" />
+         <Button layoutX="464.0" layoutY="541.0" mnemonicParsing="false" onAction="#addContato" text="+" />
+         <Button layoutX="435.0" layoutY="541.0" mnemonicParsing="false" onAction="#remContato" prefHeight="25.0" prefWidth="26.0" text="-" />
+         <Button fx:id="btSalvar" layoutX="13.0" layoutY="783.0" mnemonicParsing="false" onAction="#salvar" prefHeight="40.0" prefWidth="100.0" text="Salvar" />
             <Button fx:id="btExcluir" layoutX="122.0" layoutY="783.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="101.0" text="Excluir" />
       </children>
    </AnchorPane>
