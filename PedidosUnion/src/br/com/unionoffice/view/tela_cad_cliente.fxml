@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="863.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.unionoffice.controller.CadastroClienteController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="863.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.unionoffice.controller.CadastroClienteController">
    <content>
    <AnchorPane prefHeight="851.0" prefWidth="1280.0">
       <children>
@@ -61,6 +69,12 @@
          <Button layoutX="435.0" layoutY="541.0" mnemonicParsing="false" onAction="#remContato" prefHeight="25.0" prefWidth="26.0" text="-" />
          <Button fx:id="btSalvar" layoutX="13.0" layoutY="783.0" mnemonicParsing="false" onAction="#salvar" prefHeight="40.0" prefWidth="100.0" text="Salvar" />
             <Button fx:id="btExcluir" layoutX="122.0" layoutY="783.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="101.0" text="Excluir" />
+            <TableView fx:id="tableClientes" layoutX="522.0" layoutY="94.0" prefHeight="681.0" prefWidth="605.0">
+               <columns>
+                  <TableColumn fx:id="documentoClienteColumn" editable="false" prefWidth="116.0" sortable="false" text="Cpf / Cnpj" />
+                  <TableColumn fx:id="nomeClienteColumn" editable="false" prefWidth="490.0" sortable="false" text="Nome / Razão Social" />
+               </columns>
+            </TableView>
       </children>
    </AnchorPane>
    </content>

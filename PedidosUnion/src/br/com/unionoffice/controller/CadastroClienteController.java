@@ -1,6 +1,5 @@
 package br.com.unionoffice.controller;
 
-import java.awt.Event;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ import br.com.unionoffice.service.CepServiceVO;
 import br.com.unionoffice.util.AutoCompleteComboBoxListener;
 import br.com.unionoffice.util.MaskUtil;
 import br.com.unionoffice.util.Validators;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -70,6 +68,7 @@ public class CadastroClienteController implements Initializable {
 	@FXML
 	private ComboBox<Estado> cbEstado;
 	@FXML
+
 	private ComboBox<String> cbCidade;
 	@FXML
 	private ComboBox<Representante> cbRepresentante;
@@ -99,6 +98,12 @@ public class CadastroClienteController implements Initializable {
 	private TextField tfEmail;
 	@FXML
 	private TextArea taObservacoes;
+	@FXML
+	private TableView<Cliente> tableClientes;
+	@FXML
+	private TableColumn<Cliente, String> documentoClienteColumn;
+	@FXML
+	private TableColumn<Cliente, String> nomeClienteColumn;
 
 	private CidadeDao cidadeDao;
 	private ClienteDao clienteDao;
@@ -192,6 +197,7 @@ public class CadastroClienteController implements Initializable {
 					cbCidade.getItems().setAll(cidadeDao.getCidades(newValue));
 					autoComplete.setComboBox(cbCidade);
 				} catch (SQLException e) {
+					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Erro ao buscar as cidades: " + e.getMessage());
 				}
 
@@ -227,13 +233,13 @@ public class CadastroClienteController implements Initializable {
 	public void salvar() {
 		if (cbTipoCliente.getSelectionModel().getSelectedIndex() < 0) {
 			JOptionPane.showMessageDialog(null, "Informe o tipo do cliente", "Erro", JOptionPane.ERROR_MESSAGE);
-		} else if (tfDocumento.getText().trim().isEmpty()) {
+		} else if (tfDocumento.getText().trim().isEmpty() && !chkNaoInformado.isSelected()) {
 			JOptionPane.showMessageDialog(null, "Informe o CPF/CNPJ do cliente", "Erro", JOptionPane.ERROR_MESSAGE);
 			tfDocumento.requestFocus();
-		} else if ((tfDocumento.getText().length() > 14
+		} else if ((!chkNaoInformado.isSelected()) && ((tfDocumento.getText().length() > 14
 				&& cbTipoCliente.getSelectionModel().getSelectedItem() == TipoCliente.PESSOA_FISICA)
 				|| (tfDocumento.getText().length() <= 14
-						&& cbTipoCliente.getSelectionModel().getSelectedItem() == TipoCliente.PESSOA_JURIDICA)) {
+						&& cbTipoCliente.getSelectionModel().getSelectedItem() == TipoCliente.PESSOA_JURIDICA))) {
 			JOptionPane.showMessageDialog(null, "Documento informado em desacordo com o tipo do cliente", "Erro",
 					JOptionPane.ERROR_MESSAGE);
 			tfDocumento.requestFocus();
@@ -265,7 +271,7 @@ public class CadastroClienteController implements Initializable {
 			cliente.setTipo(cbTipoCliente.getSelectionModel().getSelectedItem());
 			if (chkNaoInformado.isSelected()) {
 				cliente.setCpfCnpj(null);
-			}else{
+			} else {
 				cliente.setCpfCnpj(tfDocumento.getText());
 			}
 			cliente.setRgIe(tfDocumento2.getText());
@@ -282,11 +288,13 @@ public class CadastroClienteController implements Initializable {
 			cliente.setObservacoes(taObservacoes.getText());
 			cliente.setContatos(olContatos);
 			try {
-				clienteDao.inserirCliente(cliente);	
+				clienteDao.inserirCliente(cliente);
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Erro ao inserir o cliente:\n"+e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Erro ao inserir o cliente:\n" + e.getMessage(), "Erro",
+						JOptionPane.ERROR_MESSAGE);
 			}
-			
+
 		}
 	}
 
@@ -313,7 +321,7 @@ public class CadastroClienteController implements Initializable {
 	}
 
 	private void limparFormContato() {
-		tfContato.clear();		
+		tfContato.clear();
 		tfDepartamento.clear();
 		tfTelefone.clear();
 		tfEmailContato.clear();
