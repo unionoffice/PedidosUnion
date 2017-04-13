@@ -1,8 +1,10 @@
 package br.com.unionoffice.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import br.com.unionoffice.modelo.Cliente;
 
@@ -13,14 +15,20 @@ public class ClienteDao {
 		this.manager = ConnectionFactory.getManager();
 	}
 
-	public void inserirCliente(Cliente cliente) throws SQLException {
-		try {
-			this.manager.getTransaction().begin();
-			this.manager.persist(cliente);
-			this.manager.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
+	public void inserirCliente(Cliente cliente) {
+		this.manager.getTransaction().begin();
+		this.manager.persist(cliente);
+		this.manager.getTransaction().commit();
+	}
+
+	public List<Cliente> listar() {
+		TypedQuery<Cliente> query = this.manager.createQuery("select c from Cliente c", Cliente.class);
+		return query.getResultList();
+	}
+	
+	public void alterarCliente(Cliente cliente){
+		this.manager.getTransaction().begin();
+		this.manager.merge(cliente);
+		this.manager.getTransaction().commit();
 	}
 }

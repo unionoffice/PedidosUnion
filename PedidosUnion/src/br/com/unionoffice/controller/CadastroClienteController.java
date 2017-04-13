@@ -112,6 +112,8 @@ public class CadastroClienteController implements Initializable {
 	private Cliente cliente;
 	private List<Contato> contatos = new ArrayList<Contato>();
 	private ObservableList<Contato> olContatos;
+	private List<Cliente> clientes;
+	private ObservableList<Cliente> olClientes;
 
 	@Override
 	public void initialize(URL url, ResourceBundle bundle) {
@@ -228,6 +230,46 @@ public class CadastroClienteController implements Initializable {
 		// ************* tableContatos
 		tableContatos.setItems(olContatos = FXCollections.observableArrayList(contatos));
 
+		// ************* documentoClienteColumn
+		documentoClienteColumn.setCellValueFactory(new PropertyValueFactory<Cliente, String>("cpfCnpj"));
+		// ************* nomeClienteColumn
+		nomeClienteColumn.setCellValueFactory(new PropertyValueFactory<Cliente, String>("nomeRazaoSocial"));
+		// ************* popula a tabela de clientes
+		populaClientes();
+
+		tableClientes.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+			cliente = newSelection;
+			popularCampos();
+		});
+	}
+
+	private void popularCampos() {
+		if (cliente != null) {
+			tfNomeRazao.setText(cliente.getNomeRazaoSocial());
+			tfEndereco.setText(cliente.getEndereco());
+			tfBairro.setText(cliente.getBairro());
+			tfComplemento.setText(cliente.getComplemento());
+			tfCep.setText(cliente.getCep());
+			tfEmail.setText(cliente.getEmail());
+			if (cliente.getCpfCnpj() != null) {
+				chkNaoInformado.setSelected(false);
+				tfDocumento.setText(cliente.getCpfCnpj());
+			} else {
+				tfDocumento.clear();
+				chkNaoInformado.setSelected(true);
+			}
+			cbTipoCliente.setValue(cliente.getTipo());
+			tfDocumento2.setText(cliente.getRgIe());
+			tfNumero.setText(cliente.getNumero());
+			cbEstado.setValue(cliente.getEstado());
+			cbCidade.setValue(cliente.getCidade());
+			cbRepresentante.setValue(cliente.getRepresentante());
+			taObservacoes.setText(cliente.getObservacoes());
+			olContatos.clear();
+			for (Contato contato : cliente.getContatos()) {
+				olContatos.add(contato);
+			}
+		}
 	}
 
 	public void salvar() {
@@ -286,9 +328,21 @@ public class CadastroClienteController implements Initializable {
 			cliente.setEmail(tfEmail.getText().trim());
 			cliente.setRepresentante(cbRepresentante.getSelectionModel().getSelectedItem());
 			cliente.setObservacoes(taObservacoes.getText());
-			cliente.setContatos(olContatos);
+			if (cliente.getId() == 0) {
+				cliente.setContatos(olContatos);
+			} else {
+				cliente.getContatos().clear();
+				cliente.getContatos().addAll(olContatos);
+			}
 			try {
-				clienteDao.inserirCliente(cliente);
+				if (cliente.getId() == 0) {
+					clienteDao.inserirCliente(cliente);
+				} else {
+					clienteDao.alterarCliente(cliente);
+				}
+				limparCampos();
+				populaClientes();
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Erro ao inserir o cliente:\n" + e.getMessage(), "Erro",
@@ -325,5 +379,33 @@ public class CadastroClienteController implements Initializable {
 		tfDepartamento.clear();
 		tfTelefone.clear();
 		tfEmailContato.clear();
+	}
+
+	private void populaClientes() {
+		clientes = clienteDao.listar();
+		tableClientes.getItems().clear();
+		tableClientes.setItems(olClientes = FXCollections.observableArrayList(clientes));
+	}
+
+	private void limparCampos() {
+		cliente = null;
+		tfNomeRazao.clear();
+		tfEndereco.clear();
+		tfBairro.clear();
+		tfComplemento.clear();
+		tfCep.clear();
+		tfEmail.clear();
+		tfDocumento.clear();
+		chkNaoInformado.setSelected(false);
+		cbTipoCliente.setValue(null);
+		tfDocumento2.clear();
+		tfNumero.clear();
+		cbEstado.setValue(null);
+		cbCidade.setValue(null);
+		cbRepresentante.setValue(null);
+		taObservacoes.clear();
+		olContatos.clear();
+		limparFormContato();
+		tableClientes.getSelectionModel().clearSelection();
 	}
 }
