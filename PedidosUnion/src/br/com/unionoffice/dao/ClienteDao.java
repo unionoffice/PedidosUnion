@@ -25,8 +25,15 @@ public class ClienteDao {
 		TypedQuery<Cliente> query = this.manager.createQuery("select c from Cliente c", Cliente.class);
 		return query.getResultList();
 	}
-	
-	public void alterarCliente(Cliente cliente){
+
+	public void excluirCliente(int idCliente) {
+		Cliente cliente = this.manager.find(Cliente.class, idCliente);
+		this.manager.getTransaction().begin();
+		this.manager.remove(cliente);
+		this.manager.getTransaction().commit();
+	}
+
+	public void alterarCliente(Cliente cliente) {
 		this.manager.getTransaction().begin();
 		this.manager.merge(cliente);
 		this.manager.getTransaction().commit();

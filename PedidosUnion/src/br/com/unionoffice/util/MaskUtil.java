@@ -1,17 +1,11 @@
 package br.com.unionoffice.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 public abstract class MaskUtil {
@@ -57,6 +51,25 @@ public abstract class MaskUtil {
 					}
 				}
 			}
+		});
+	}
+
+	/**
+	 * Campo que aceita somente letras e ponto.
+	 *
+	 * @param textField
+	 *            TextField
+	 */
+	public static void letterField(final TextField textField) {
+		textField.textProperty().addListener((ov, oldValue, newValue) -> {
+			textField.setText(newValue.toUpperCase());
+			if (newValue.length() > oldValue.length()) {
+				char ch = textField.getText().charAt(oldValue.length());
+				if (!(ch >= 'A' && ch <= 'Z') && ch != '.') {
+					textField.setText(textField.getText().substring(0, textField.getText().length() - 1));
+				}
+			}
+
 		});
 	}
 
@@ -114,7 +127,7 @@ public abstract class MaskUtil {
 	 *            TextField
 	 */
 	public static void cpfCnpjField(final TextField textField) {
-		
+
 		textField.setOnKeyTyped(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -177,8 +190,8 @@ public abstract class MaskUtil {
 		});
 
 	}
-	
-	public static void cepField(TextField textField){
+
+	public static void cepField(TextField textField) {
 		maxField(textField, 8);
 		numericField(textField);
 	}
@@ -215,7 +228,5 @@ public abstract class MaskUtil {
 			}
 		});
 	}
-	
-	
 
 }

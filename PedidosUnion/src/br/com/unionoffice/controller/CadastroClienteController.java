@@ -352,6 +352,26 @@ public class CadastroClienteController implements Initializable {
 		}
 	}
 
+	public void excluir() {
+		if (cliente == null) {
+			JOptionPane.showMessageDialog(null, "Selecione um cliente para excluí-lo", "Erro",
+					JOptionPane.ERROR_MESSAGE);
+		} else if (JOptionPane.showConfirmDialog(null,
+				"Deseja excluir o cliente: " + cliente.getNomeRazaoSocial() + "?", "Confirmar",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
+			try {
+				clienteDao.excluirCliente(cliente.getId());
+				limparCampos();
+				populaClientes();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Erro ao excluir o cliente:\n" + e.getMessage(), "Erro",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
 	public void addContato() {
 		if (tfContato.getText().trim().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Informe o nome do contato", "Erro", JOptionPane.ERROR_MESSAGE);
