@@ -22,7 +22,31 @@ public class ClienteDao {
 	}
 
 	public List<Cliente> listar() {
-		TypedQuery<Cliente> query = this.manager.createQuery("select c from Cliente c", Cliente.class);
+		TypedQuery<Cliente> query = this.manager.createQuery("select c from Cliente c order by c.nomeRazaoSocial",
+				Cliente.class);
+		return query.getResultList();
+	}
+
+	public List<Cliente> buscarPorDocumento(String documento) {
+		TypedQuery<Cliente> query = this.manager.createQuery(
+				"select c from Cliente c where c.cpfCnpj like :documento order by c.nomeRazaoSocial ", Cliente.class);
+		query.setParameter("documento", "%" + documento + "%");
+		return query.getResultList();
+	}
+
+	public List<Cliente> buscarPorNome(String nome) {
+		TypedQuery<Cliente> query = this.manager.createQuery(
+				"select c from Cliente c where c.nomeRazaoSocial like :nome order by c.nomeRazaoSocial ",
+				Cliente.class);
+		query.setParameter("nome", "%" + nome + "%");
+		return query.getResultList();
+	}
+	
+	public List<Cliente> buscarQualquer(String parametro) {
+		TypedQuery<Cliente> query = this.manager.createQuery(
+				"select c from Cliente c where c.nomeRazaoSocial like :parametro or c.endereco like :parametro or c.email like :parametro or c.observacoes like :parametro order by c.nomeRazaoSocial ",
+				Cliente.class);
+		query.setParameter("parametro", "%" + parametro + "%");
 		return query.getResultList();
 	}
 

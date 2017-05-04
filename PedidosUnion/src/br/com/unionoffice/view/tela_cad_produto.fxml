@@ -9,26 +9,25 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="616.0" prefWidth="1088.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.unionoffice.controller.CadastroProdutoController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="616.0" prefWidth="1155.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.unionoffice.controller.CadastroProdutoController">
    <children>
-      <Label layoutX="519.0" layoutY="16.0" style="-fx-font-weight: bold;" text="Código:" />
-      <TextField fx:id="tfCodigo" alignment="CENTER" layoutX="569.0" layoutY="12.0" prefHeight="25.0" prefWidth="110.0" promptText="XX.X.XXX.XXX" />
-      <Label layoutX="519.0" layoutY="51.0" text="Descrição resumida:" />
-      <TextArea fx:id="taDescResum" layoutX="519.0" layoutY="73.0" prefHeight="85.0" prefWidth="556.0" />
-      <Label layoutX="519.0" layoutY="170.0" text="Descrição detalhada:" />
-      <TextArea fx:id="taDescDet" layoutX="519.0" layoutY="191.0" prefHeight="357.0" prefWidth="321.0" />
-      <Label layoutX="945.0" layoutY="16.0" style="-fx-font-weight: bold;" text="Preço:" />
-      <TextField fx:id="tfPreco" alignment="CENTER" layoutX="987.0" layoutY="12.0" prefHeight="25.0" prefWidth="88.0" />
-      <Label layoutX="857.0" layoutY="170.0" text="Foto:" />
-      <ImageView fx:id="ivFoto" fitHeight="357.0" fitWidth="217.0" layoutX="857.0" layoutY="191.0" pickOnBounds="true" />
-      <Button fx:id="btSalvar" layoutX="519.0" layoutY="565.0" mnemonicParsing="false" onAction="#salvar" prefHeight="40.0" prefWidth="100.0" text="Salvar" />
-      <Button fx:id="btExcluir" layoutX="630.0" layoutY="565.0" mnemonicParsing="false" onAction="#excluir" prefHeight="40.0" prefWidth="100.0" text="Excluir" />
-      <TableView fx:id="tbProduto" layoutX="8.0" layoutY="74.0" prefHeight="532.0" prefWidth="501.0">
+      <Label layoutX="585.0" layoutY="16.0" style="-fx-font-weight: bold;" text="Código:" />
+      <TextField fx:id="tfCodigo" alignment="CENTER" layoutX="635.0" layoutY="12.0" prefHeight="25.0" prefWidth="110.0" promptText="XX.X.XXX.XXX" />
+      <Label layoutX="1011.0" layoutY="16.0" style="-fx-font-weight: bold;" text="Preço:" />
+      <TextField fx:id="tfPreco" alignment="CENTER" layoutX="1053.0" layoutY="12.0" prefHeight="25.0" prefWidth="88.0" />
+      <Label layoutX="585.0" layoutY="51.0" text="Descrição resumida:" />
+      <TextArea fx:id="taDescResum" layoutX="585.0" layoutY="73.0" prefHeight="85.0" prefWidth="556.0" wrapText="true" />
+      <Label layoutX="585.0" layoutY="170.0" text="Descrição detalhada:" />
+      <TextArea fx:id="taDescDet" layoutX="585.0" layoutY="191.0" prefHeight="357.0" prefWidth="321.0" wrapText="true" />
+      <Label layoutX="923.0" layoutY="170.0" text="Foto:" />
+      <ImageView fx:id="ivFoto" fitHeight="357.0" fitWidth="217.0" layoutX="923.0" layoutY="191.0" pickOnBounds="true" />
+      <Button fx:id="btSalvar" layoutX="585.0" layoutY="565.0" mnemonicParsing="false" onAction="#salvar" prefHeight="40.0" prefWidth="100.0" text="Salvar" />
+      <Button fx:id="btExcluir" layoutX="696.0" layoutY="565.0" mnemonicParsing="false" onAction="#excluir" prefHeight="40.0" prefWidth="100.0" text="Excluir" />
+      <TableView fx:id="tbProduto" layoutX="8.0" layoutY="74.0" prefHeight="532.0" prefWidth="564.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+          <TableColumn fx:id="codigoColumn" prefWidth="121.0" text="Código" />
+          <TableColumn fx:id="descricaoColumn" prefWidth="720.0" text="Descrição" />
         </columns>
       </TableView>
-      <Button fx:id="btFoto" layoutX="1019.0" layoutY="565.0" mnemonicParsing="false" onAction="#foto" prefHeight="40.0" prefWidth="55.0" text="Foto" />
    </children>
 </AnchorPane>

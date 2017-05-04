@@ -19,7 +19,6 @@ public class Produto {
 	@Column(columnDefinition = "TEXT")
 	private String descDetalhada;
 	private BigDecimal preco;
-	private String foto;
 
 	public Long getId() {
 		return id;
@@ -59,14 +58,6 @@ public class Produto {
 
 	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
-	}
-
-	public String getFoto() {
-		return foto;
-	}
-
-	public void setFoto(String foto) {
-		this.foto = foto;
 	}
 
 }

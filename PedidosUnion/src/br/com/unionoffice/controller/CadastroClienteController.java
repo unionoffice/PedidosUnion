@@ -8,6 +8,9 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
+import com.sun.javafx.scene.control.skin.TextAreaSkin;
+
 import br.com.unionoffice.dao.CidadeDao;
 import br.com.unionoffice.dao.ClienteDao;
 import br.com.unionoffice.dao.RepresentanteDao;
@@ -25,6 +28,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -39,6 +43,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class CadastroClienteController implements Initializable {
 	@FXML
@@ -68,7 +74,6 @@ public class CadastroClienteController implements Initializable {
 	@FXML
 	private ComboBox<Estado> cbEstado;
 	@FXML
-
 	private ComboBox<String> cbCidade;
 	@FXML
 	private ComboBox<Representante> cbRepresentante;
@@ -104,6 +109,10 @@ public class CadastroClienteController implements Initializable {
 	private TableColumn<Cliente, String> documentoClienteColumn;
 	@FXML
 	private TableColumn<Cliente, String> nomeClienteColumn;
+	@FXML
+	private ComboBox<String> cbPesquisa;
+	@FXML
+	private TextField tfPesquisa;
 
 	private CidadeDao cidadeDao;
 	private ClienteDao clienteDao;
@@ -205,7 +214,6 @@ public class CadastroClienteController implements Initializable {
 
 			}
 		});
-		// ************* cbCidade
 
 		// ************* cbRepresentante
 		try {
@@ -213,6 +221,24 @@ public class CadastroClienteController implements Initializable {
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Erro ao buscar os representantes: " + e.getMessage());
 		}
+
+		// ************* taObservacoes
+		taObservacoes.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
+			if (event.getCode() == KeyCode.TAB) {
+				TextAreaSkin skin = (TextAreaSkin) taObservacoes.getSkin();
+				if (skin.getBehavior() instanceof TextAreaBehavior) {
+					TextAreaBehavior behavior = (TextAreaBehavior) skin.getBehavior();
+					if (event.isControlDown()) {
+						behavior.callAction("InsertTab");
+					} else if (event.isShiftDown()) {
+						behavior.callAction("TraversePrevious");
+					} else {
+						behavior.callAction("TraverseNext");
+					}
+					event.consume();
+				}
+			}
+		});
 
 		// ************* btSalvar
 		Image imagem = new Image(getClass().getResourceAsStream("/imagens/save_icon.png"));
@@ -235,12 +261,18 @@ public class CadastroClienteController implements Initializable {
 		// ************* nomeClienteColumn
 		nomeClienteColumn.setCellValueFactory(new PropertyValueFactory<Cliente, String>("nomeRazaoSocial"));
 		// ************* popula a tabela de clientes
-		populaClientes();
+		populaClientes(clienteDao.listar());
 
 		tableClientes.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 			cliente = newSelection;
 			popularCampos();
 		});
+
+		// ************* cbPesquisa
+		cbPesquisa.getItems().add("CPF / CNPJ");
+		cbPesquisa.getItems().add("Nome / Razão Social");
+		cbPesquisa.getItems().add("Qualquer texto");
+		cbPesquisa.getSelectionModel().select(0);
 	}
 
 	private void popularCampos() {
@@ -341,7 +373,7 @@ public class CadastroClienteController implements Initializable {
 					clienteDao.alterarCliente(cliente);
 				}
 				limparCampos();
-				populaClientes();
+				populaClientes(clienteDao.listar());
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -362,7 +394,7 @@ public class CadastroClienteController implements Initializable {
 			try {
 				clienteDao.excluirCliente(cliente.getId());
 				limparCampos();
-				populaClientes();
+				populaClientes(clienteDao.listar());
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -401,8 +433,8 @@ public class CadastroClienteController implements Initializable {
 		tfEmailContato.clear();
 	}
 
-	private void populaClientes() {
-		clientes = clienteDao.listar();
+	private void populaClientes(List<Cliente> lista) {
+		clientes = lista;
 		tableClientes.getItems().clear();
 		tableClientes.setItems(olClientes = FXCollections.observableArrayList(clientes));
 	}
@@ -427,5 +459,22 @@ public class CadastroClienteController implements Initializable {
 		olContatos.clear();
 		limparFormContato();
 		tableClientes.getSelectionModel().clearSelection();
+	}
+
+	@FXML
+	public void buscar(ActionEvent event) {
+		switch (cbPesquisa.getSelectionModel().getSelectedIndex()) {
+		case 0:
+			populaClientes(clienteDao.buscarPorDocumento(tfPesquisa.getText()));
+			break;
+		case 1:
+			populaClientes(clienteDao.buscarPorNome(tfPesquisa.getText()));
+			break;
+
+		case 2:
+			populaClientes(clienteDao.buscarQualquer(tfPesquisa.getText()));
+			break;
+
+		}
 	}
 }
